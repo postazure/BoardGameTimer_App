@@ -1,11 +1,9 @@
 export default {
   list: {
-    marginVertical: 10,
-    flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'flex-start',
+    marginBottom: 10 
   },
 
   item: {
@@ -13,5 +11,5 @@ export default {
     width: 45,
     height: 45
   },
-  
+
 }

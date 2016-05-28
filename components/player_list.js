@@ -111,7 +111,7 @@ export default class PlayerList extends Component {
         <ActionButton action={this.addPlayer} label={'+Player'} />
       </View>
 
-      <ScrollView horizontal={false}>
+      <ScrollView horizontal={false} showsVerticalScrollIndicator={true}>
       <ListView
       dataSource={this.state.dataSource}
       renderRow={this.renderPlayer}
@@ -132,6 +132,7 @@ export default class PlayerList extends Component {
       <ColorButton
       color={player.color}
       playerId={player.id}
+      playerName={player.name}
       updatePlayerColor={this.updatePlayerColor}
       style={$.colorButton}
       />

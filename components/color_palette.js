@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import $ from '../stylesheets/main';
 import {
-  ScrollView,
   View,
   Text,
   TouchableHighlight
@@ -32,14 +31,14 @@ export default class ColorPalette extends Component {
     });
 
     return(
-      <ScrollView horizontal={false} style={{flex: 1}}>
-      <Text style={[$.h1, {color: 'white'}]}>
-      Select Color
+      <View style={$.modal}>
+      <Text style={$.h1White}>
+      Select Color: {this.props.playerName}
       </Text>
       <View style={$.list}>
       {palette}
       </View>
-      </ScrollView>
+      </View>
     )
   }
 

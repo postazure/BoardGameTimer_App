@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TouchableHighlight,
+  TouchableWithoutFeedback,
   Modal
 } from 'react-native';
 
@@ -38,9 +39,8 @@ export default class ColorButton extends Component {
     return(
       <View>
       <Modal visible={this.state.paletteOpen} transparent={true} animationType={'slide'}>
-        <View style={$.modal}>
-        <ColorPalette closePalette={this.closePalette}/>
-        </View>
+        <View style={$.flex}></View>
+        <ColorPalette closePalette={this.closePalette} playerName={this.props.playerName}/>
       </Modal>
 
       <TouchableHighlight onPress={this.openPalette}>

@@ -4,6 +4,11 @@ import item_grid from './item_grid'
 import buttons from './buttons'
 
 const main = {
+  debug: {
+    borderWidth: 2,
+    borderColor: 'red'
+  },
+
   bgColor: {
     backgroundColor: 'rgb(70,70,70)',
   },
@@ -43,7 +48,7 @@ const main = {
     backgroundColor: 'rgba(80,80,80,0.8)',
     borderRadius: 25,
     borderWidth: 1,
-    borderColor: 'white'
+    borderColor: 'white',
   },
 
   colorButton: {
@@ -62,6 +67,12 @@ const main = {
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
+  },
+
+  flexColumn: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flexDirection: 'column',
   }
 };
 
