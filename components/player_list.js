@@ -37,7 +37,6 @@ export default class PlayerList extends Component {
 
   componentDidMount(){
     AsyncStorage.getItem('players', (err, res) => {
-      debugger;
       let players;
       if (err !== null || res === null){
         players = [
@@ -111,7 +110,6 @@ export default class PlayerList extends Component {
   }
 
   startGame(){
-    debugger
     AsyncStorage.setItem('players', JSON.stringify(this.state.players));
     // Send to timer via bluetooth
     this.setState({inProgress: true});
