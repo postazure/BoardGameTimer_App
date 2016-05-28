@@ -82,8 +82,8 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: '#bbb',
-    borderWidth: 1,
-    borderColor: '#ff6600'
+    marginVertical: 2,
+    marginHorizontal: 2
   },
 
   rightContainer: {
@@ -96,7 +96,6 @@ var styles = StyleSheet.create({
     marginBottom: 8,
     fontWeight: '600',
     textAlign: 'center',
-    color: 'white'
   },
 
   title: {

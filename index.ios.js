@@ -20,7 +20,7 @@ class BoardGameTimer_App extends Component {
 const s = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#123'
+    backgroundColor: '#D3D3D3'
   }
 });
 
