@@ -15,20 +15,13 @@ export default class PlayerList extends Component {
   constructor(props){
     super(props);
 
-    sampleData = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
+    let ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
     });
 
-    players = [
-      {name: 'UserNameA', color: [255,0,0], id: 1},
-      {name: 'UserNameB', color: [0,255,0], id: 2},
-      {name: 'UserNameC', color: [0,0,255], id: 3},
-      {name: 'UserNameD', color: [75,165,0], id: 4},
-    ];
-
     this.state = {
-      dataSource: sampleData.cloneWithRows(players),
-      players: players,
+      dataSource: ds,
+      players: [],
       inProgress: false
     };
 
@@ -36,33 +29,62 @@ export default class PlayerList extends Component {
     this.startGame = this.startGame.bind(this);
     this.stopGame = this.stopGame.bind(this);
     this.addPlayer = this.addPlayer.bind(this);
+    this.removePlayer = this.removePlayer.bind(this);
     this.updatePlayerColor = this.updatePlayerColor.bind(this);
     this.updatePlayerName = this.updatePlayerName.bind(this);
   }
 
+  componentDidMount(){
+    let players = [
+      {name: 'UserNameA', color: [255,0,0], id: 1},
+      {name: 'UserNameB', color: [0,255,0], id: 2},
+      {name: 'UserNameC', color: [0,0,255], id: 3},
+      {name: 'UserNameD', color: [75,165,0], id: 4},
+    ];
+
+    this.setState({
+      players: players,
+      dataSource: this.state.dataSource.cloneWithRows(players)
+    });
+  }
+
   updatePlayerColor(id, color){
     let playerList = Object.assign([], this.state.players);
-    let player = playerList.find(p => p.id == id);
+    let player = playerList.find(p => p.id === id);
     player.color = color;
     this.setState({
       players: playerList,
-      dataSource: sampleData.cloneWithRows(playerList)
+      dataSource: this.state.dataSource.cloneWithRows(playerList)
     });
   }
 
   updatePlayerName(id, name){
     let playerList = Object.assign([], this.state.players);
-    let player = playerList.find(p => p.id == id);
+    let player = playerList.find(p => p.id === id);
     player.name = name;
     this.setState({
       players: playerList,
-      dataSource: sampleData.cloneWithRows(playerList)
+      dataSource: this.state.dataSource.cloneWithRows(playerList)
     });
   }
 
+  removePlayer(id){
+    let newPlayers = Object.assign([], this.state.players);
+
+    let player = newPlayers.find(p => p.id == id)
+    newPlayers.splice(newPlayers.indexOf(player), 1);
+    this.setState({
+      players: newPlayers,
+      dataSource: this.state.dataSource.cloneWithRows(newPlayers)
+    })
+  }
+
   addPlayer(){
-    let playerIds = this.state.players.map(p => p.id);
-    let maxId = Math.max.apply(null, playerIds);
+    let maxId = 0;
+    if (this.state.players.length > 1) {
+      let playerIds = this.state.players.map(p => p.id);
+      maxId = Math.max.apply(null, playerIds);
+    }
 
     let newPlayer = {
       name: 'new player',
@@ -74,7 +96,8 @@ export default class PlayerList extends Component {
     newPlayers.push(newPlayer);
     this.setState({
       players: newPlayers,
-      dataSource: sampleData.cloneWithRows(newPlayers)
+      dataSource: this.state.dataSource.cloneWithRows(newPlayers)
+
     })
   }
 
@@ -111,12 +134,11 @@ export default class PlayerList extends Component {
         <ActionButton action={this.addPlayer} label={'+Player'} />
       </View>
 
-      <ScrollView horizontal={false} showsVerticalScrollIndicator={true}>
       <ListView
       dataSource={this.state.dataSource}
       renderRow={this.renderPlayer}
+      enableEmptySections={true}
       />
-      </ScrollView>
 
       <Text style={$.note}>
       Note: Times calculated when timer is paused.
@@ -128,7 +150,9 @@ export default class PlayerList extends Component {
 
   renderPlayer(player) {
     return (
-      <View style={[$.header, $.playerRow]}>
+      <View style={[$.header, $.playerRow]} key={player.id}>
+      <ActionButton action={() => this.removePlayer(player.id)} label={'X'} />
+
       <ColorButton
       color={player.color}
       playerId={player.id}

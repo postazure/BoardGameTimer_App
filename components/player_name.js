@@ -24,6 +24,8 @@ export default class PlayerName extends Component {
       <TextInput
         style={{height: 30, marginLeft: 5}}
         autoCorrect={false}
+        multiline={false}
+        clearButtonMode={'while-editing'} //iOS only
         onChangeText={(name) => this.updateState(name)}
         value={this.state.name}
       />
