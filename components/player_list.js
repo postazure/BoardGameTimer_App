@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ColorButton from './color_button';
 import PlayerName from './player_name';
+import $ from '../stylesheets/main';
 import {
-  StyleSheet,
   Text,
   TouchableHighlight,
   View,
@@ -73,27 +73,27 @@ export default class PlayerList extends Component {
     if (this.state.inProgress) {
       actionButton = (
         <TouchableHighlight onPress={this.stopGame}>
-          <Text style={styles.title}> Stop </Text>
+          <Text style={$.title}> Stop </Text>
         </TouchableHighlight>
       )
     } else {
       actionButton = (
         <TouchableHighlight onPress={this.startGame}>
-          <Text style={styles.title}> Start </Text>
+          <Text style={$.title}> Start </Text>
         </TouchableHighlight>
       )
     }
 
     return (
-      <View style={styles.container}>
+      <View style={$.playerList}>
 
-      <View style={styles.header}>
-        <Text style={[{flex: 1}, styles.h1]}>
+      <View style={$.header}>
+        <Text style={[{flex: 1}, $.h1]}>
           Player List
         </Text>
       </View>
 
-      <View style={styles.header}>
+      <View style={$.header}>
         {actionButton}
       </View>
 
@@ -102,7 +102,7 @@ export default class PlayerList extends Component {
       renderRow={this.renderPlayer}
       />
 
-      <Text style={{color: 'white', marginTop: 10, textAlign: 'center'}}>
+      <Text style={$.note}>
       Note: Times calculated when timer is paused.
       </Text>
 
@@ -112,61 +112,21 @@ export default class PlayerList extends Component {
 
   renderPlayer(player) {
     return (
-      <View style={[styles.header, styles.playerRow]}>
+      <View style={[$.header, $.playerRow]}>
       <ColorButton
       color={player.color}
       playerId={player.id}
       updatePlayerColor={this.updatePlayerColor}/>
 
-      <View style={styles.rightContainer}>
-      <PlayerName name={player.name} updatePlayerName={this.updatePlayerName} playerId={player.id} style={styles.title}/>
+      <View style={$.rightContainer}>
+      <PlayerName name={player.name} updatePlayerName={this.updatePlayerName} playerId={player.id} style={$.title}/>
       </View>
 
-      <View style={styles.rightContainer}>
-      <Text style={styles.subtitle}>Total: 00h 00m 00s </Text>
-      <Text style={styles.subtitle}>Average: 00m 00s </Text>
+      <View style={$.rightContainer}>
+      <Text style={$.subtitle}>Total: 00h 00m 00s </Text>
+      <Text style={$.subtitle}>Average: 00m 00s </Text>
       </View>
       </View>
     );
   }
 }
-
-var styles = StyleSheet.create({
-  playerRow: {
-    backgroundColor: '#bbb',
-    marginVertical: 2,
-    marginHorizontal: 2
-  },
-
-  header: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-
-  rightContainer: {
-    flex: 1,
-  },
-
-  h1: {
-    fontSize: 20,
-    marginTop: 8,
-    marginBottom: 8,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-
-  title: {
-    fontSize: 16,
-    marginBottom: 4,
-    marginHorizontal: 10,
-    textAlign: 'left',
-    color: 'black'
-  },
-
-  subtitle: {
-    textAlign: 'left',
-    color: 'black'
-  }
-});

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ColorPalette from './color_palette';
+import $ from '../stylesheets/main';
 import {
-  StyleSheet,
   Text,
   View,
   TouchableHighlight,
@@ -36,13 +36,15 @@ export default class ColorButton extends Component {
 
   render() {
     return(
-      <View>
-      <Modal visible={this.state.paletteOpen}>
+      <View style={{flex:1}}>
+      <Modal visible={this.state.paletteOpen} transparent={true} animationType={'slide'} style={$.modal}>
+        <View style={{backgroundColor: 'rgba(20,20,20,0.8)', borderRadius: 25, borderWidth: 1, borderColor: 'white'}}>
         <ColorPalette closePalette={this.closePalette}/>
+        </View>
       </Modal>
 
       <TouchableHighlight onPress={this.openPalette}>
-        <View style={[selected(this.state.color), s.border]}></View>
+        <View style={[selected(this.state.color), $.border]}></View>
       </TouchableHighlight>
       </View>
     )
@@ -57,10 +59,3 @@ let selected = (color) => {
     backgroundColor: `rgb(${colorStr})`
   }
 }
-
-var s = StyleSheet.create({
-  border: {
-    borderWidth: 2,
-    borderColor: 'black'
-  }
-});

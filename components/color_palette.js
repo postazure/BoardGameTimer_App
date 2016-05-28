@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import $ from '../stylesheets/main';
 import {
-  StyleSheet,
   ScrollView,
   View,
   Text,
@@ -26,17 +26,17 @@ export default class ColorPalette extends Component {
     let palette = this.state.paletteColors.map((rgb) => {
       return(
         <TouchableHighlight key={rgb} onPress={() => {this.handlePress(rgb)}}>
-          <View style={[bg(rgb), s.border, s.item]}></View>
+          <View style={[bg(rgb), $.border, $.item]}></View>
         </TouchableHighlight>
       )
     });
 
     return(
-      <ScrollView horizontal={false} style={{marginVertical: 20}}>
-      <Text style={s.h1}>
+      <ScrollView horizontal={false} style={{flex: 1}}>
+      <Text style={[$.h1, {color: 'white'}]}>
       Select Color
       </Text>
-      <View style={s.list}>
+      <View style={$.list}>
       {palette}
       </View>
       </ScrollView>
@@ -62,33 +62,3 @@ let bg = (color) => {
     backgroundColor: `rgb(${colorStr})`
   }
 }
-
-var s = StyleSheet.create({
-  border: {
-    borderWidth: 1,
-    borderColor: 'black'
-  },
-
-  list: {
-    marginVertical: 10,
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
-  },
-
-  item: {
-    margin: 2,
-    width: 30,
-    height: 30
-  },
-
-  h1: {
-    fontSize: 20,
-    marginTop: 8,
-    marginBottom: 8,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-});

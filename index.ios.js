@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PlayerList from './components/player_list'
+import $ from './stylesheets/main'
 import {
   AppRegistry,
-  StyleSheet,
   Text,
   View
 } from 'react-native';
@@ -10,18 +10,11 @@ import {
 class BoardGameTimer_App extends Component {
   render() {
     return (
-      <View style={[s.container, {marginTop: 20}]}>
-        <PlayerList style={s.container}/>
+      <View style={[$.bgColor, $.flex, {marginTop: 20}]}>
+        <PlayerList style={$.flex}/>
       </View>
     );
   }
 }
-
-const s = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#D3D3D3'
-  }
-});
 
 AppRegistry.registerComponent('BoardGameTimer_App', () => BoardGameTimer_App);
