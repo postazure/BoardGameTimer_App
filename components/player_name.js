@@ -22,7 +22,7 @@ export default class PlayerName extends Component {
     return (
       <View>
       <TextInput
-        style={{height: 40, marginLeft: 5}}
+        style={{height: 30, marginLeft: 5}}
         autoCorrect={false}
         onChangeText={(name) => this.updateState(name)}
         value={this.state.name}

@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import typography from './typography'
 import item_grid from './item_grid'
+import buttons from './buttons'
 
 const main = {
   bgColor: {
@@ -15,7 +16,11 @@ const main = {
     backgroundColor: '#bbb',
     marginVertical: 2,
     marginHorizontal: 2,
-    borderRadius: 5
+    borderRadius: 5,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 
   header: {
@@ -34,9 +39,30 @@ const main = {
     borderColor: 'black'
   },
 
-  playerList: {
+  modal: {
+    backgroundColor: 'rgba(80,80,80,0.8)',
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: 'white'
+  },
 
+  colorButton: {
+    flex: 0.20
+  },
+
+  playerName: {
+    flex: 0.40
+  },
+
+  playerTimes: {
+    flex: 0.40
+  },
+
+  flexRow: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   }
 };
 
-export default StyleSheet.create(Object.assign({}, main, typography, item_grid));
+export default StyleSheet.create(Object.assign({}, main, typography, item_grid, buttons));

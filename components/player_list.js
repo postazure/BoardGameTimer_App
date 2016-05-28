@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ColorButton from './color_button';
 import PlayerName from './player_name';
+import ActionButton from './action_button';
 import $ from '../stylesheets/main';
 import {
   Text,
@@ -71,30 +72,23 @@ export default class PlayerList extends Component {
   render() {
     let actionButton;
     if (this.state.inProgress) {
-      actionButton = (
-        <TouchableHighlight onPress={this.stopGame}>
-          <Text style={$.title}> Stop </Text>
-        </TouchableHighlight>
-      )
+      actionButton = <ActionButton action={this.stopGame} label={'Stop'}/>
     } else {
-      actionButton = (
-        <TouchableHighlight onPress={this.startGame}>
-          <Text style={$.title}> Start </Text>
-        </TouchableHighlight>
-      )
+      actionButton = <ActionButton action={this.startGame} label={'Start'}/>
     }
 
     return (
       <View style={$.playerList}>
 
       <View style={$.header}>
-        <Text style={[{flex: 1}, $.h1]}>
+        <Text style={$.h1White}>
           Player List
         </Text>
       </View>
 
-      <View style={$.header}>
+      <View style={$.flexRow}>
         {actionButton}
+
       </View>
 
       <ListView
@@ -116,13 +110,15 @@ export default class PlayerList extends Component {
       <ColorButton
       color={player.color}
       playerId={player.id}
-      updatePlayerColor={this.updatePlayerColor}/>
+      updatePlayerColor={this.updatePlayerColor}
+      style={$.colorButton}
+      />
 
-      <View style={$.rightContainer}>
+      <View style={$.playerName}>
       <PlayerName name={player.name} updatePlayerName={this.updatePlayerName} playerId={player.id} style={$.title}/>
       </View>
 
-      <View style={$.rightContainer}>
+      <View style={$.playerTime}>
       <Text style={$.subtitle}>Total: 00h 00m 00s </Text>
       <Text style={$.subtitle}>Average: 00m 00s </Text>
       </View>

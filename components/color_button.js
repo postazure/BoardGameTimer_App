@@ -36,9 +36,9 @@ export default class ColorButton extends Component {
 
   render() {
     return(
-      <View style={{flex:1}}>
-      <Modal visible={this.state.paletteOpen} transparent={true} animationType={'slide'} style={$.modal}>
-        <View style={{backgroundColor: 'rgba(20,20,20,0.8)', borderRadius: 25, borderWidth: 1, borderColor: 'white'}}>
+      <View>
+      <Modal visible={this.state.paletteOpen} transparent={true} animationType={'slide'}>
+        <View style={$.modal}>
         <ColorPalette closePalette={this.closePalette}/>
         </View>
       </Modal>
@@ -54,8 +54,9 @@ export default class ColorButton extends Component {
 let selected = (color) => {
   let colorStr = color.join(',');
   return {
-    width: 60,
-    height: 60,
+    width: 58,
+    height: 58,
+    margin: 3,
     backgroundColor: `rgb(${colorStr})`
   }
 }

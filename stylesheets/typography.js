@@ -1,10 +1,12 @@
 export default {
-  h1: {
+  h1White: {
     fontSize: 20,
     marginTop: 8,
     marginBottom: 8,
     fontWeight: '600',
     textAlign: 'center',
+    flex: 1,
+    color: 'white'
   },
 
   title: {
