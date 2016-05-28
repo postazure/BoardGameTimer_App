@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ColorButton from './color_button';
 import {
   StyleSheet,
   Text,
@@ -15,10 +16,10 @@ export default class PlayerList extends Component {
     });
 
     players = [
-      {name: 'UserNameA', color: '255,0,0'},
-      {name: 'UserNameB', color: '0,255,0'},
-      {name: 'UserNameC', color: '0,0,255'},
-      {name: 'UserNameD', color: '75,165,0'},
+      {name: 'UserNameA', color: [255,0,0]},
+      {name: 'UserNameB', color: [0,255,0]},
+      {name: 'UserNameC', color: [0,0,255]},
+      {name: 'UserNameD', color: [75,165,0]},
     ];
 
     this.state = {
@@ -29,18 +30,18 @@ export default class PlayerList extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.h1}>
-          Player List
-        </Text>
+      <Text style={styles.h1}>
+      Player List
+      </Text>
 
-        <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this.renderPlayer}
-        />
+      <ListView
+      dataSource={this.state.dataSource}
+      renderRow={this.renderPlayer}
+      />
 
-        <Text style={{color: 'white', marginTop: 10, textAlign: 'center'}}>
-          Note: Times calculated when timer is paused.
-          </Text>
+      <Text style={{color: 'white', marginTop: 10, textAlign: 'center'}}>
+      Note: Times calculated when timer is paused.
+      </Text>
       </View>
     );
   }
@@ -48,30 +49,19 @@ export default class PlayerList extends Component {
   renderPlayer(player) {
     return (
       <View style={styles.playerRow}>
-        <View style={colorPicker(player)}>
-          <Text style={styles.subtitle}>{player.color}</Text>
-        </View>
+      <ColorButton color={player.color}/>
 
-        <View style={styles.rightContainer}>
-          <Text style={styles.title}>{player.name}</Text>
+      <View style={styles.rightContainer}>
+      <Text style={styles.title}>{player.name}</Text>
 
-        </View>
+      </View>
 
-        <View style={styles.rightContainer}>
-        <Text style={styles.subtitle}>Total: 00h 00m 00s </Text>
-        <Text style={styles.subtitle}>Average: 00m 00s </Text>
-        </View>
+      <View style={styles.rightContainer}>
+      <Text style={styles.subtitle}>Total: 00h 00m 00s </Text>
+      <Text style={styles.subtitle}>Average: 00m 00s </Text>
+      </View>
       </View>
     );
-  }
-}
-
-let colorPicker = (player) => {
-  return {
-    width: 60,
-    height: 60,
-    marginRight: 20,
-    backgroundColor: `rgb(${player.color})`
   }
 }
 
@@ -101,6 +91,7 @@ var styles = StyleSheet.create({
   title: {
     fontSize: 16,
     marginBottom: 4,
+    marginHorizontal: 10,
     textAlign: 'left',
     color: 'black'
   },
@@ -108,5 +99,5 @@ var styles = StyleSheet.create({
   subtitle: {
     textAlign: 'left',
     color: 'black'
-  },
+  }
 });
