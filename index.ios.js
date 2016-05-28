@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PlayerList from './components/player_card'
+import PlayerList from './components/player_list'
 import {
   AppRegistry,
   StyleSheet,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ColorButton from './color_button';
+import PlayerName from './player_name';
 import {
   StyleSheet,
   Text,
@@ -25,12 +26,15 @@ export default class PlayerList extends Component {
 
     this.state = {
       dataSource: sampleData.cloneWithRows(players),
-      players: players
+      players: players,
+      inProgress: false
     };
 
     this.renderPlayer = this.renderPlayer.bind(this);
     this.startGame = this.startGame.bind(this);
+    this.stopGame = this.stopGame.bind(this);
     this.updatePlayerColor = this.updatePlayerColor.bind(this);
+    this.updatePlayerName = this.updatePlayerName.bind(this);
   }
 
   updatePlayerColor(id, color){
@@ -43,12 +47,43 @@ export default class PlayerList extends Component {
     });
   }
 
+  updatePlayerName(id, name){
+    let playerList = Object.assign([], this.state.players);
+    let player = playerList.find(p => p.id == id);
+    player.name = name;
+    this.setState({
+      players: playerList,
+      dataSource: sampleData.cloneWithRows(playerList)
+    });
+  }
+
   startGame(){
     // Send to timer via bluetooth
+    this.setState({inProgress: true});
     console.log(this.state.players);
   }
 
+  stopGame(){
+    // Compute final data
+    this.setState({inProgress: false});
+  }
+
   render() {
+    let actionButton;
+    if (this.state.inProgress) {
+      actionButton = (
+        <TouchableHighlight onPress={this.stopGame}>
+          <Text style={styles.title}> Stop </Text>
+        </TouchableHighlight>
+      )
+    } else {
+      actionButton = (
+        <TouchableHighlight onPress={this.startGame}>
+          <Text style={styles.title}> Start </Text>
+        </TouchableHighlight>
+      )
+    }
+
     return (
       <View style={styles.container}>
 
@@ -59,9 +94,7 @@ export default class PlayerList extends Component {
       </View>
 
       <View style={styles.header}>
-        <TouchableHighlight onPress={this.startGame}>
-          <Text style={styles.title}> Start </Text>
-        </TouchableHighlight>
+        {actionButton}
       </View>
 
       <ListView
@@ -86,7 +119,7 @@ export default class PlayerList extends Component {
       updatePlayerColor={this.updatePlayerColor}/>
 
       <View style={styles.rightContainer}>
-      <Text style={styles.title}>{player.name}</Text>
+      <PlayerName name={player.name} updatePlayerName={this.updatePlayerName} playerId={player.id} style={styles.title}/>
       </View>
 
       <View style={styles.rightContainer}>
