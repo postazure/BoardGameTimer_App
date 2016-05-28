@@ -4,6 +4,7 @@ import PlayerName from './player_name';
 import ActionButton from './action_button';
 import $ from '../stylesheets/main';
 import {
+  AsyncStorage,
   Text,
   TouchableHighlight,
   View,
@@ -35,17 +36,25 @@ export default class PlayerList extends Component {
   }
 
   componentDidMount(){
-    let players = [
-      {name: 'UserNameA', color: [255,0,0], id: 1},
-      {name: 'UserNameB', color: [0,255,0], id: 2},
-      {name: 'UserNameC', color: [0,0,255], id: 3},
-      {name: 'UserNameD', color: [75,165,0], id: 4},
-    ];
+    AsyncStorage.getItem('players', (err, res) => {
+      debugger;
+      let players;
+      if (err !== null || res === null){
+        players = [
+          {name: 'UserNameA', color: [255,0,0], id: 1},
+          {name: 'UserNameB', color: [0,255,0], id: 2},
+          {name: 'UserNameC', color: [0,0,255], id: 3},
+          {name: 'UserNameD', color: [75,165,0], id: 4},
+        ];
+      } else {
+        players = JSON.parse(res)
+      }
 
-    this.setState({
-      players: players,
-      dataSource: this.state.dataSource.cloneWithRows(players)
-    });
+      this.setState({
+        players: players,
+        dataSource: this.state.dataSource.cloneWithRows(players)
+      });
+    })
   }
 
   updatePlayerColor(id, color){
@@ -102,6 +111,8 @@ export default class PlayerList extends Component {
   }
 
   startGame(){
+    debugger
+    AsyncStorage.setItem('players', JSON.stringify(this.state.players));
     // Send to timer via bluetooth
     this.setState({inProgress: true});
     console.log(this.state.players);
