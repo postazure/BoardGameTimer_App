@@ -19,6 +19,7 @@ export default class ColorButton extends Component {
 
     this.closePalette = this.closePalette.bind(this);
     this.openPalette = this.openPalette.bind(this);
+    this.abortPallete = this.abortPallete.bind(this);
   }
 
   openPalette(){
@@ -35,11 +36,17 @@ export default class ColorButton extends Component {
     })
   }
 
+  abortPallete(){
+    this.setState({paletteOpen: false})
+  }
+
   render() {
     return(
       <View>
       <Modal visible={this.state.paletteOpen} transparent={true} animationType={'slide'}>
-        <View style={$.flex}></View>
+        <TouchableWithoutFeedback style={$.flex} onPress={this.abortPallete}>
+          <View style={$.flex}></View>
+        </TouchableWithoutFeedback>
         <ColorPalette closePalette={this.closePalette} playerName={this.props.playerName}/>
       </Modal>
 
