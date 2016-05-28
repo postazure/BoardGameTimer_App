@@ -33,7 +33,7 @@ export default class ColorPalette extends Component {
     return(
       <View style={$.modal}>
       <Text style={$.h1White}>
-      Select Color: {this.props.playerName}
+      Select Color
       </Text>
       <View style={$.list}>
       {palette}
