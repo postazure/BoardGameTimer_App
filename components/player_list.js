@@ -7,6 +7,7 @@ import {
   Text,
   TouchableHighlight,
   View,
+  ScrollView,
   ListView
 } from 'react-native';
 
@@ -34,6 +35,7 @@ export default class PlayerList extends Component {
     this.renderPlayer = this.renderPlayer.bind(this);
     this.startGame = this.startGame.bind(this);
     this.stopGame = this.stopGame.bind(this);
+    this.addPlayer = this.addPlayer.bind(this);
     this.updatePlayerColor = this.updatePlayerColor.bind(this);
     this.updatePlayerName = this.updatePlayerName.bind(this);
   }
@@ -56,6 +58,24 @@ export default class PlayerList extends Component {
       players: playerList,
       dataSource: sampleData.cloneWithRows(playerList)
     });
+  }
+
+  addPlayer(){
+    let playerIds = this.state.players.map(p => p.id);
+    let maxId = Math.max.apply(null, playerIds);
+
+    let newPlayer = {
+      name: 'new player',
+      color: [255,255,255],
+      id: maxId + 1
+    };
+
+    let newPlayers = Object.assign([], this.state.players);
+    newPlayers.push(newPlayer);
+    this.setState({
+      players: newPlayers,
+      dataSource: sampleData.cloneWithRows(newPlayers)
+    })
   }
 
   startGame(){
@@ -86,15 +106,17 @@ export default class PlayerList extends Component {
         </Text>
       </View>
 
-      <View style={$.flexRow}>
+      <View style={[$.flexRow, {marginBottom: 10}]}>
         {actionButton}
-
+        <ActionButton action={this.addPlayer} label={'+Player'} />
       </View>
 
+      <ScrollView horizontal={false}>
       <ListView
       dataSource={this.state.dataSource}
       renderRow={this.renderPlayer}
       />
+      </ScrollView>
 
       <Text style={$.note}>
       Note: Times calculated when timer is paused.

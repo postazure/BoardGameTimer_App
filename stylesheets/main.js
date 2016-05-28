@@ -59,7 +59,7 @@ const main = {
   },
 
   flexRow: {
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
   }
