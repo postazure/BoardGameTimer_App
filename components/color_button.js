@@ -27,6 +27,7 @@ export default class ColorButton extends Component {
   }
 
   closePalette(color){
+    this.props.updatePlayerColor(this.props.playerId, color);
     this.setState({
       paletteOpen: false,
       color: color

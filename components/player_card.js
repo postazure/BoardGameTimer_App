@@ -3,6 +3,7 @@ import ColorButton from './color_button';
 import {
   StyleSheet,
   Text,
+  TouchableHighlight,
   View,
   ListView
 } from 'react-native';
@@ -16,23 +17,52 @@ export default class PlayerList extends Component {
     });
 
     players = [
-      {name: 'UserNameA', color: [255,0,0]},
-      {name: 'UserNameB', color: [0,255,0]},
-      {name: 'UserNameC', color: [0,0,255]},
-      {name: 'UserNameD', color: [75,165,0]},
+      {name: 'UserNameA', color: [255,0,0], id: 1},
+      {name: 'UserNameB', color: [0,255,0], id: 2},
+      {name: 'UserNameC', color: [0,0,255], id: 3},
+      {name: 'UserNameD', color: [75,165,0], id: 4},
     ];
 
     this.state = {
-      dataSource: sampleData.cloneWithRows(players)
+      dataSource: sampleData.cloneWithRows(players),
+      players: players
     };
+
+    this.renderPlayer = this.renderPlayer.bind(this);
+    this.startGame = this.startGame.bind(this);
+    this.updatePlayerColor = this.updatePlayerColor.bind(this);
+  }
+
+  updatePlayerColor(id, color){
+    let playerList = Object.assign([], this.state.players);
+    let player = playerList.find(p => p.id == id);
+    player.color = color;
+    this.setState({
+      players: playerList,
+      dataSource: sampleData.cloneWithRows(playerList)
+    });
+  }
+
+  startGame(){
+    // Send to timer via bluetooth
+    console.log(this.state.players);
   }
 
   render() {
     return (
       <View style={styles.container}>
-      <Text style={styles.h1}>
-      Player List
-      </Text>
+
+      <View style={styles.header}>
+        <Text style={[{flex: 1}, styles.h1]}>
+          Player List
+        </Text>
+      </View>
+
+      <View style={styles.header}>
+        <TouchableHighlight onPress={this.startGame}>
+          <Text style={styles.title}> Start </Text>
+        </TouchableHighlight>
+      </View>
 
       <ListView
       dataSource={this.state.dataSource}
@@ -42,18 +72,21 @@ export default class PlayerList extends Component {
       <Text style={{color: 'white', marginTop: 10, textAlign: 'center'}}>
       Note: Times calculated when timer is paused.
       </Text>
+
       </View>
     );
   }
 
   renderPlayer(player) {
     return (
-      <View style={styles.playerRow}>
-      <ColorButton color={player.color}/>
+      <View style={[styles.header, styles.playerRow]}>
+      <ColorButton
+      color={player.color}
+      playerId={player.id}
+      updatePlayerColor={this.updatePlayerColor}/>
 
       <View style={styles.rightContainer}>
       <Text style={styles.title}>{player.name}</Text>
-
       </View>
 
       <View style={styles.rightContainer}>
@@ -67,13 +100,16 @@ export default class PlayerList extends Component {
 
 var styles = StyleSheet.create({
   playerRow: {
+    backgroundColor: '#bbb',
+    marginVertical: 2,
+    marginHorizontal: 2
+  },
+
+  header: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: '#bbb',
-    marginVertical: 2,
-    marginHorizontal: 2
   },
 
   rightContainer: {
