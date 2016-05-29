@@ -11,19 +11,21 @@ import {
   ScrollView,
   ListView
 } from 'react-native';
+import prettyMS from 'pretty-ms';
 
 export default class PlayerList extends Component {
   constructor(props){
     super(props);
 
     let ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
+      // Constantly update when game has not started
+      rowHasChanged: (r1, r2) => r1 !== r2 || !this.state.inProgress
     });
 
     this.state = {
       dataSource: ds,
       players: [],
-      inProgress: false
+      inProgress: false,
     };
 
     this.renderPlayer = this.renderPlayer.bind(this);
@@ -54,6 +56,14 @@ export default class PlayerList extends Component {
         dataSource: this.state.dataSource.cloneWithRows(players)
       });
     })
+
+    AsyncStorage.getItem('inProgress', (err, res) => {
+      let progress = false;
+      if(res !== null) {
+        progress = JSON.parse(res);
+      }
+      this.setState({inProgress: progress});
+    });
   }
 
   updatePlayerColor(id, color){
@@ -111,12 +121,13 @@ export default class PlayerList extends Component {
 
   startGame(){
     AsyncStorage.setItem('players', JSON.stringify(this.state.players));
+    AsyncStorage.setItem('inProgress', JSON.stringify(true));
     // Send to timer via bluetooth
     this.setState({inProgress: true});
-    console.log(this.state.players);
   }
 
   stopGame(){
+    AsyncStorage.setItem('inProgress', JSON.stringify(false));
     // Compute final data
     this.setState({inProgress: false});
   }
@@ -126,7 +137,9 @@ export default class PlayerList extends Component {
     if (this.state.inProgress) {
       actionButton = <ActionButton action={this.stopGame} label={'Stop'}/>
     } else {
-      actionButton = <ActionButton action={this.startGame} label={'Start'}/>
+      actionButton = (
+      <ActionButton action={this.startGame} label={'Start'}/>
+      )
     }
 
     return (
@@ -140,7 +153,7 @@ export default class PlayerList extends Component {
 
       <View style={[$.flexRow, {marginBottom: 10}]}>
         {actionButton}
-        <ActionButton action={this.addPlayer} label={'+Player'} />
+        {this.state.inProgress ?null: <ActionButton action={this.addPlayer} label={'+Player'} />}
       </View>
 
       <ListView
@@ -160,7 +173,11 @@ export default class PlayerList extends Component {
   renderPlayer(player) {
     return (
       <View style={[$.header, $.playerRow]} key={player.id}>
-      <ActionButton action={() => this.removePlayer(player.id)} label={'X'} />
+      {
+        this.state.inProgress ?null:
+        <ActionButton action={() => this.removePlayer(player.id)} label={'X'} />
+      }
+
 
       <ColorButton
       color={player.color}
@@ -175,8 +192,8 @@ export default class PlayerList extends Component {
       </View>
 
       <View style={$.playerTime}>
-      <Text style={$.subtitle}>Total: 00h 00m 00s </Text>
-      <Text style={$.subtitle}>Average: 00m 00s </Text>
+      <Text style={$.subtitle}>Total: {prettyMS(1234567)} </Text>
+      <Text style={$.subtitle}>Average: {prettyMS(123456)} </Text>
       </View>
       </View>
     );

@@ -9,7 +9,7 @@ import {
 export default class ActionButton extends Component {
   render() {
     return (
-      <TouchableHighlight onPress={this.props.action} style={$.actionButton}>
+      <TouchableHighlight onPress={this.props.action} underlayColor={'#EBF9FF'} style={$.actionButton}>
         <Text style={$.title}>{this.props.label}</Text>
       </TouchableHighlight>
     );
