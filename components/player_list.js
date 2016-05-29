@@ -51,6 +51,9 @@ export default class PlayerList extends Component {
         players = JSON.parse(res)
       }
 
+      if(err !== null) {
+        throw err;
+      }
       this.setState({
         players: players,
         dataSource: this.state.dataSource.cloneWithRows(players)
@@ -61,6 +64,9 @@ export default class PlayerList extends Component {
       let progress = false;
       if(res !== null) {
         progress = JSON.parse(res);
+      }
+      if(err !== null) {
+        throw err;
       }
       this.setState({inProgress: progress});
     });
@@ -115,13 +121,16 @@ export default class PlayerList extends Component {
     this.setState({
       players: newPlayers,
       dataSource: this.state.dataSource.cloneWithRows(newPlayers)
-
     })
   }
 
   startGame(){
-    AsyncStorage.setItem('players', JSON.stringify(this.state.players));
-    AsyncStorage.setItem('inProgress', JSON.stringify(true));
+    AsyncStorage.setItem('players', JSON.stringify(this.state.players),() => {
+      console.log("Saved Players")
+    });
+    AsyncStorage.setItem('inProgress', JSON.stringify(true),() => {
+      console.log("Saved Progress")
+    });
     // Send to timer via bluetooth
     this.setState({inProgress: true});
   }
