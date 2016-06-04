@@ -10,7 +10,7 @@ import {
 export default class IconButton extends Component {
   render() {
     let color = 'white';
-    if (this.props.color.length > 0){
+    if (this.props.color){
       color = this.props.color
     }
 

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PlayerRow from './player_row'
-import ActionButton from '../action_button';
+import IconButton from '../icon_button';
 import $ from '../../stylesheets/main';
+import colors from '../../stylesheets/colors';
 import {
   Text,
   View
@@ -84,10 +85,10 @@ export default class PlayerList extends Component {
   render() {
     let actionButton;
     if (this.props.currentGame.inProgress) {
-      actionButton = <ActionButton action={this.stopGame} label={'Stop'}/>
+      actionButton = <IconButton action={this.stopGame} iconName='stop' color={colors.darkBlue}/>
     } else {
       actionButton = (
-      <ActionButton action={this.startGame} label={'Start'}/>
+      <IconButton action={this.startGame} iconName='play-arrow' color={colors.darkBlue}/>
       )
     }
 
@@ -105,7 +106,7 @@ export default class PlayerList extends Component {
       <View style={$.flex}>
       <View style={[$.actionBar, $.flexRow]}>
         {actionButton}
-        {this.props.currentGame.inProgress ?null: <ActionButton action={this.addPlayer} label={'Add Player'} />}
+        {this.props.currentGame.inProgress ?null: <IconButton color={colors.darkBlue} action={this.addPlayer} iconName="person-add" />}
       </View>
 
       <View style={[$.playerList, {flex: .9}]}>
@@ -113,7 +114,7 @@ export default class PlayerList extends Component {
       </View>
 
       <Text style={[$.note, {flex: .1}]}>
-      Note: Times calculated when timer is paused.
+      Note: Add players.
       </Text>
 
       </View>

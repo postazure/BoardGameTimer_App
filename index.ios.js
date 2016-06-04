@@ -72,7 +72,7 @@ class BoardGameTimer_App extends Component {
           <View style={{position: 'absolute', left: 10, top: 20}}>
             <IconButton iconName={this.state.ble ? "bluetooth" : "bluetooth-disabled"} action={this.setupBluetooth} color={'white'}/>
           </View>
-          <Text style={$.appHeaderText}>Player List</Text>
+          <Text style={$.appHeaderText}>Game Timer</Text>
         </View>
         <PlayerList style={$.flex} currentGame={this.state.currentGame} updateCurrentGame={this.updateCurrentGame}/>
       </View>

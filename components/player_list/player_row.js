@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ColorButton from './color_button';
 import PlayerName from './player_name';
-import ActionButton from '../action_button';
+import IconButton from '../icon_button';
 import $ from '../../stylesheets/main';
+import colors from '../../stylesheets/colors';
 import {
   Alert,
   Text,
@@ -31,8 +32,6 @@ export default class PlayerRow extends Component {
   render() {
     let player = this.props.player;
 
-
-
     return (
       <View style={$.playerRow}>
         <ColorButton
@@ -56,8 +55,8 @@ export default class PlayerRow extends Component {
 
         {
           this.props.inProgress ?null:
-          <ActionButton
-            action={() => this.handleRemovePlayer(player)} label={'X'} type={'danger'}/>
+          <IconButton
+            action={() => this.handleRemovePlayer(player)} iconName="remove-circle" color={colors.pink}/>
         }
       </View>
     );
