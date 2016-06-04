@@ -17,7 +17,6 @@ export default class PlayerList extends Component {
   constructor(props){
     super(props);
 
-    this.renderPlayer = this.renderPlayer.bind(this);
     this.startGame = this.startGame.bind(this);
     this.stopGame = this.stopGame.bind(this);
     this.addPlayer = this.addPlayer.bind(this);
@@ -128,35 +127,6 @@ export default class PlayerList extends Component {
       Note: Times calculated when timer is paused.
       </Text>
 
-      </View>
-    );
-  }
-
-  renderPlayer(player) {
-    return (
-      <View style={[$.header, $.playerRow]} key={player.id}>
-      {
-        this.props.currentGame.inProgress ?null:
-        <ActionButton action={() => this.removePlayer(player.id)} label={'X'} />
-      }
-
-
-      <ColorButton
-      color={player.color}
-      playerId={player.id}
-      playerName={player.name}
-      updatePlayerColor={this.updatePlayerColor}
-      style={$.colorButton}
-      />
-
-      <View style={$.playerName}>
-      <PlayerName name={player.name} updatePlayerName={this.updatePlayerName} playerId={player.id} style={$.title}/>
-      </View>
-
-      <View style={$.playerTime}>
-      <Text style={$.subtitle}>Total: {prettyMS(1234567)} </Text>
-      <Text style={$.subtitle}>Average: {prettyMS(123456)} </Text>
-      </View>
       </View>
     );
   }
