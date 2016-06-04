@@ -18,14 +18,17 @@ export default class BleConfig extends Component {
     this.onPeripheralFound = this.onPeripheralFound.bind(this);
     this.getCharacteristic = this.getCharacteristic.bind(this);
     this.writeToBle = this.writeToBle.bind(this);
+    this.readFromBle = this.readFromBle.bind(this);
 
     this.turnOn = this.turnOn.bind(this);
     this.turnOff = this.turnOff.bind(this);
     this.disconnect = this.disconnect.bind(this);
+    this.readFromBuffer = this.readFromBuffer.bind(this);
 
     this.state = {
       btCharacteristic: null,
-      peripheral: null
+      peripheral: null,
+      btResponse: ''
     }
   }
 
@@ -61,6 +64,8 @@ export default class BleConfig extends Component {
       });
 
       peripheral.discoverAllServicesAndCharacteristics((err, services, characteristics) => {
+        characteristics[0].notify(true);
+        characteristics[0].on('data', this.readFromBle);
         this.setState({btCharacteristic: characteristics[0]})
       })
     });
@@ -71,12 +76,21 @@ export default class BleConfig extends Component {
     this.state.btCharacteristic.write(buf, true);
   }
 
+  readFromBle(buf){
+    console.log("reading buffer", buf);
+    this.setState({btResponse: buf.toString()})
+  }
+
   turnOn(){
     this.writeToBle("on");
   }
 
   turnOff(){
     this.writeToBle("off");
+  }
+
+  readFromBuffer(){
+    this.readFromBle();
   }
 
   disconnect(){
@@ -104,6 +118,7 @@ export default class BleConfig extends Component {
         <ActionButton label={"On"} action={this.turnOn} />
         <ActionButton label={"Off"} action={this.turnOff} />
         <ActionButton label={"Disconnect"} action={this.disconnect} />
+        <Text style={$.h1White}>{this.state.btResponse}</Text>
       </View>
     );
   }
