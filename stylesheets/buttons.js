@@ -1,11 +1,15 @@
 export default {
   actionButton: {
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'rgb(200,200,200)',
+    height: 40,
 
-    backgroundColor: 'rgb(150,150,150)',
+    flex:.1,
+    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'center'
+  },
 
-    height: 25,
+  actionButtonText:{
+    fontSize: 16,
+    color: 'grey'
   }
 }

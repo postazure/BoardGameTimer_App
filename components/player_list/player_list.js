@@ -50,7 +50,7 @@ export default class PlayerList extends Component {
   addPlayer(){
     let maxId = 0;
 
-    if (this.players().length > 1) {
+    if (this.players().length > 0) {
       let playerIds = this.players().map(p => p.id);
       maxId = Math.max.apply(null, playerIds);
     }
@@ -90,7 +90,7 @@ export default class PlayerList extends Component {
       <ActionButton action={this.startGame} label={'Start'}/>
       )
     }
-
+    
     let playerRows = this.players().map((player) => {
       return <PlayerRow
         key={player.id}

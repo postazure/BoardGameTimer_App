@@ -3,15 +3,15 @@ import $ from '../stylesheets/main';
 import {
   Text,
   TextInput,
-  TouchableHighlight
+  TouchableOpacity
 } from 'react-native';
 
 export default class ActionButton extends Component {
   render() {
     return (
-      <TouchableHighlight onPress={this.props.action} underlayColor={'#EBF9FF'} style={$.actionButton}>
-        <Text style={$.title}>{this.props.label}</Text>
-      </TouchableHighlight>
+      <TouchableOpacity onPress={this.props.action} underlayColor={'#EBF9FF'} style={$.actionButton}>
+        <Text style={$.actionButtonText}>{this.props.label}</Text>
+      </TouchableOpacity>
     );
   }
 }

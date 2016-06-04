@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from '../../stylesheets/main';
 import {
   StyleSheet,
   TextInput,
@@ -22,7 +23,7 @@ export default class PlayerName extends Component {
     return (
       <View>
       <TextInput
-        style={{height: 30, marginLeft: 5}}
+        style={$.playerNameInput}
         autoCorrect={false}
         multiline={false}
         clearButtonMode={'while-editing'} //iOS only

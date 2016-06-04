@@ -3,6 +3,8 @@ import typography from './typography'
 import item_grid from './item_grid'
 import buttons from './buttons'
 
+import vars from './vars'
+
 const main = {
   debug: {
     borderWidth: 2,
@@ -21,7 +23,6 @@ const main = {
     backgroundColor: '#bbb',
     marginVertical: 2,
     marginHorizontal: 2,
-    borderRadius: 5,
 
     justifyContent: 'center',
     alignItems: 'center',
@@ -73,6 +74,11 @@ const main = {
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'column',
+  },
+
+  playerNameInput: {
+    height: vars.playerRowHeight,
+    marginLeft: 5
   }
 };
 
