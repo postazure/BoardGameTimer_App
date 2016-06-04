@@ -52,7 +52,7 @@ const main = {
     fontSize: 22,
     fontWeight: '600',
     textAlign: 'center',
-    color: colors.white
+    color: 'white'
   },
 
   border: {

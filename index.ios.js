@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PlayerList from './components/player_list/player_list'
 import BleConfig from './components/ble_config/ble_config'
+import IconButton from './components/icon_button'
 import $ from './stylesheets/main'
+import colors from './stylesheets/colors'
+
 import {
   AsyncStorage,
   AppRegistry,
@@ -66,6 +69,9 @@ class BoardGameTimer_App extends Component {
     return (
       <View style={$.appBg}>
         <View style={$.appBar}>
+          <View style={{position: 'absolute', left: 10, top: 20}}>
+            <IconButton iconName={this.state.ble ? "bluetooth" : "bluetooth-disabled"} action={this.setupBluetooth} color={'white'}/>
+          </View>
           <Text style={$.appHeaderText}>Player List</Text>
         </View>
         <PlayerList style={$.flex} currentGame={this.state.currentGame} updateCurrentGame={this.updateCurrentGame}/>
