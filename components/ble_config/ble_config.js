@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import $ from '../../stylesheets/main';
+import {Buffer} from 'buffer';
 import {
   Text,
   View
@@ -37,7 +38,6 @@ export default class BleConfig extends Component {
     if (peripheral.advertisement.localName === "zeus"){
       this._printPeripheral(peripheral);
       this._writeToPeripheral(peripheral);
-      // this._connectToBLE(peripheral);
     }
   }
 
@@ -51,7 +51,9 @@ export default class BleConfig extends Component {
 
       peripheral.discoverAllServicesAndCharacteristics((err, services, characteristics) => {
         console.log("discovered characteristics", services[0].uuid, characteristics[0].uuid);
-        characteristics[0].write("on", true);
+
+        let buf = Buffer.from("on")
+        characteristics[0].write(buf, true);
       })
     });
   }
@@ -84,73 +86,6 @@ export default class BleConfig extends Component {
 
     console.log();
   }
-
-  _connectToBLE(peripheral){
-
-    // const HEART_RATE_VALUE_FORMAT = 1;
-    // function parseHR (bytes) {
-    //   //Check for data
-    //   if (bytes.length == 0)
-    //   {
-    //       return 0;
-    //   }
-    //
-    //   //Get the first byte that contains flags
-    //   var flag = bytes[0];
-    //
-    //   //Check if u8 or u16 and get heart rate
-    //   var hr;
-    //   if ((flag & 0x01) == 1)
-    //   {
-    //       var u16bytes = bytes.buffer.slice(1, 3);
-    //       var u16 = new Uint16Array(u16bytes)[0];
-    //       hr = u16;
-    //   }
-    //   else
-    //   {
-    //       var u8bytes = bytes.buffer.slice(1, 2);
-    //       var u8 = new Uint8Array(u8bytes)[0];
-    //       hr = u8;
-    //   }
-    //   return hr;
-    // }
-    //
-    var self = this;
-    // function print(data, notification){
-    //   var heartRate = parseHR(data)
-    //   console.log(heartRate);
-    //   self.setState({
-    //     heartRate:heartRate
-    //   });
-    // }
-
-    var characteristic;
-    function notify(error, services, characteristics){
-      console.log("discovered characteristics", services[0].uuid, characteristics[0].uuid);
-      self.characteristic = characteristics[0];
-      console.log(self.characteristic)
-      // self.characteristic.write("on", true)
-      // self.characteristic.notify(true);
-      // self.characteristic.on("data", print);
-    };
-
-    function disconnected(){
-      console.log("disconnected");
-      self.characteristic.removeListener('data', print);
-      self._connectHeartRate(peripheral);
-      self.setState({
-        heartRate:0
-      });
-    };
-
-    function discover(error){
-      peripheral.once('disconnect', disconnected);
-      console.log("connect", error);
-      peripheral.discoverAllServicesAndCharacteristics(notify);
-    }
-    peripheral.connect(discover);
-  }
-
 
   render() {
     return (
