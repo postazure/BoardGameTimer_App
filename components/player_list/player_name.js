@@ -23,7 +23,7 @@ export default class PlayerName extends Component {
     return (
       <View>
       <TextInput
-        style={$.playerNameInput}
+        style={$.playerName}
         autoCorrect={false}
         multiline={false}
         clearButtonMode={'while-editing'} //iOS only

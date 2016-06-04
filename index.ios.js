@@ -29,7 +29,6 @@ class BoardGameTimer_App extends Component {
 
   }
 
-
   updateCurrentGame(currentGame){
     let newCurrentGameState = Object.assign({}, this.state.currentGame, currentGame);
     this.setState({currentGame: newCurrentGameState},
@@ -58,14 +57,17 @@ class BoardGameTimer_App extends Component {
   render() {
     if(!this.state.ble) {
       return (
-        <View style={[$.bgColor, $.flex, {marginTop: 20}]}>
+        <View style={[$.appBg, $.flex, {marginTop: 20}]}>
           <BleConfig />
         </View>
       )
     }
 
     return (
-      <View style={[$.bgColor, $.flex, {marginTop: 20}]}>
+      <View style={$.appBg}>
+        <View style={$.appBar}>
+          <Text style={$.appHeaderText}>Player List</Text>
+        </View>
         <PlayerList style={$.flex} currentGame={this.state.currentGame} updateCurrentGame={this.updateCurrentGame}/>
       </View>
     );

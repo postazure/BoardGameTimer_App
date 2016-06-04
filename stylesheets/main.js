@@ -2,8 +2,9 @@ import {StyleSheet} from 'react-native';
 import typography from './typography'
 import item_grid from './item_grid'
 import buttons from './buttons'
+import player_list from './player_list'
 
-import vars from './vars'
+import colors from './colors'
 
 const main = {
   debug: {
@@ -11,22 +12,13 @@ const main = {
     borderColor: 'red'
   },
 
-  bgColor: {
-    backgroundColor: 'rgb(70,70,70)',
+  appBg: {
+    backgroundColor: colors.white,
+    flex: 1
   },
 
   flex: {
     flex: 1,
-  },
-
-  playerRow: {
-    backgroundColor: '#bbb',
-    marginVertical: 2,
-    marginHorizontal: 2,
-
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
   },
 
   header: {
@@ -36,28 +28,47 @@ const main = {
     flexDirection: 'row',
   },
 
-  rightContainer: {
-    flex: 1,
+  appBar: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+
+    marginBottom: 3,
+    paddingTop: 30,
+    paddingBottom: 15,
+
+    backgroundColor: colors.lightBlue,
+
+    shadowOffset: {
+      height: 0,
+      width: 0
+    },
+    shadowColor: 'rgb(0,0,0)',
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+  },
+
+  appHeaderText: {
+    fontSize: 22,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: colors.white
   },
 
   border: {
-    borderWidth: 2,
-    borderColor: 'black'
+    borderWidth: 1,
+    borderColor: colors.lightGrey
   },
 
   modal: {
-    backgroundColor: 'rgba(80,80,80,0.8)',
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: 'white',
-  },
-
-  colorButton: {
-    flex: 0.20
-  },
-
-  playerName: {
-    flex: 0.40
+    backgroundColor: colors.darkBlue,
+    shadowOffset: {
+      height: 0,
+      width: 0
+    },
+    shadowColor: 'rgb(0,0,0)',
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
   },
 
   playerTimes: {
@@ -76,10 +87,6 @@ const main = {
     flexDirection: 'column',
   },
 
-  playerNameInput: {
-    height: vars.playerRowHeight,
-    marginLeft: 5
-  }
 };
 
-export default StyleSheet.create(Object.assign({}, main, typography, item_grid, buttons));
+export default StyleSheet.create(Object.assign({}, main, typography, item_grid, buttons, player_list));

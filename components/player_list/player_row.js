@@ -15,33 +15,31 @@ export default class PlayerRow extends Component {
     let player = this.props.player;
 
     return (
-      <View style={[$.header, $.playerRow]}>
-        {
-          this.props.inProgress ?null:
-          <ActionButton
-            action={() => this.props.removePlayer(player.id)} label={'X'} />
-        }
-
+      <View style={$.playerRow}>
         <ColorButton
         color={player.color}
         playerId={player.id}
         playerName={player.name}
         updatePlayerColor={this.props.updatePlayerColor}
-        style={$.colorButton}
         />
 
-        <View style={$.playerName}>
+        <View style={{flex: 0.4}}>
           <PlayerName
             name={player.name}
             updatePlayerName={this.props.updatePlayerName}
-            playerId={player.id}
-            style={$.title}/>
+            playerId={player.id}/>
         </View>
 
         <View style={$.playerTime}>
           <Text style={$.subtitle}>Total: {prettyMS(1234567)} </Text>
           <Text style={$.subtitle}>Average: {prettyMS(123456)} </Text>
         </View>
+
+        {
+          this.props.inProgress ?null:
+          <ActionButton
+            action={() => this.props.removePlayer(player.id)} label={'X'} type={'danger'}/>
+        }
       </View>
     );
   }

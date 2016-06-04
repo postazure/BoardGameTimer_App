@@ -1,20 +1,19 @@
+import colors from './colors'
+
 export default {
   h1White: {
     fontSize: 20,
-    marginTop: 8,
-    marginBottom: 8,
-    fontWeight: '600',
+    fontWeight: '500',
     textAlign: 'center',
-    flex: 1,
-    color: 'white'
+    color: colors.white
   },
 
   title: {
-    fontSize: 16,
-    marginBottom: 4,
-    marginHorizontal: 10,
-    textAlign: 'left',
-    color: 'black'
+    fontSize: 20,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: colors.white,
+    paddingVertical: 5
   },
 
   subtitle: {
@@ -23,7 +22,7 @@ export default {
   },
 
   note: {
-    color: 'white',
+    color: colors.lightGrey,
     marginTop: 10,
     flex: 1,
     textAlign: 'center'

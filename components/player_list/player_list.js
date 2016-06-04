@@ -90,7 +90,7 @@ export default class PlayerList extends Component {
       <ActionButton action={this.startGame} label={'Start'}/>
       )
     }
-    
+
     let playerRows = this.players().map((player) => {
       return <PlayerRow
         key={player.id}
@@ -102,22 +102,17 @@ export default class PlayerList extends Component {
     })
 
     return (
-      <View style={$.playerList}>
-
-      <View style={$.header}>
-        <Text style={$.h1White}>
-          Player List
-        </Text>
-      </View>
-
-      <View style={[$.flexRow, {marginBottom: 10}]}>
+      <View style={$.flex}>
+      <View style={[$.actionBar, $.flexRow]}>
         {actionButton}
-        {this.props.currentGame.inProgress ?null: <ActionButton action={this.addPlayer} label={'+Player'} />}
+        {this.props.currentGame.inProgress ?null: <ActionButton action={this.addPlayer} label={'Add Player'} />}
       </View>
 
+      <View style={[$.playerList, {flex: .9}]}>
       {playerRows}
+      </View>
 
-      <Text style={$.note}>
+      <Text style={[$.note, {flex: .1}]}>
       Note: Times calculated when timer is paused.
       </Text>
 

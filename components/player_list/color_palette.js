@@ -32,7 +32,7 @@ export default class ColorPalette extends Component {
 
     return(
       <View style={$.modal}>
-      <Text style={$.h1White}>
+      <Text style={$.title}>
       Select Color
       </Text>
       <View style={$.list}>
