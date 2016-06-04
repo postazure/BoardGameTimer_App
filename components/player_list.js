@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import ColorButton from './color_button';
 import PlayerName from './player_name';
+import PlayerRow from './player_row'
 import ActionButton from './action_button';
 import $ from '../stylesheets/main';
 import {
-  AsyncStorage,
   Text,
   TouchableHighlight,
   View,
@@ -17,17 +17,6 @@ export default class PlayerList extends Component {
   constructor(props){
     super(props);
 
-    let ds = new ListView.DataSource({
-      // Constantly update when game has not started
-      rowHasChanged: (r1, r2) => r1 !== r2 || !this.state.inProgress
-    });
-
-    this.state = {
-      dataSource: ds,
-      players: [],
-      inProgress: false,
-    };
-
     this.renderPlayer = this.renderPlayer.bind(this);
     this.startGame = this.startGame.bind(this);
     this.stopGame = this.stopGame.bind(this);
@@ -37,119 +26,87 @@ export default class PlayerList extends Component {
     this.updatePlayerName = this.updatePlayerName.bind(this);
   }
 
-  componentDidMount(){
-    AsyncStorage.getItem('players', (err, res) => {
-      let players;
-      if (err !== null || res === null){
-        players = [
-          {name: 'UserNameA', color: [255,0,0], id: 1},
-          {name: 'UserNameB', color: [0,255,0], id: 2},
-          {name: 'UserNameC', color: [0,0,255], id: 3},
-          {name: 'UserNameD', color: [75,165,0], id: 4},
-        ];
-      } else {
-        players = JSON.parse(res)
-      }
-
-      if(err !== null) {
-        throw err;
-      }
-      this.setState({
-        players: players,
-        dataSource: this.state.dataSource.cloneWithRows(players)
-      });
-    })
-
-    AsyncStorage.getItem('inProgress', (err, res) => {
-      let progress = false;
-      if(res !== null) {
-        progress = JSON.parse(res);
-      }
-      if(err !== null) {
-        throw err;
-      }
-      this.setState({inProgress: progress});
-    });
+  players(){
+    return this.props.currentGame.players;
   }
 
   updatePlayerColor(id, color){
-    let playerList = Object.assign([], this.state.players);
-    let player = playerList.find(p => p.id === id);
+    let players = Object.assign([], this.players());
+    let player = players.find(p => p.id === id);
     player.color = color;
-    this.setState({
-      players: playerList,
-      dataSource: this.state.dataSource.cloneWithRows(playerList)
-    });
+
+    this.updatePlayers(players);
   }
 
   updatePlayerName(id, name){
-    let playerList = Object.assign([], this.state.players);
-    let player = playerList.find(p => p.id === id);
+    let players = Object.assign([], this.players());
+    let player = players.find(p => p.id === id);
     player.name = name;
-    this.setState({
-      players: playerList,
-      dataSource: this.state.dataSource.cloneWithRows(playerList)
-    });
+
+    this.updatePlayers(players);
   }
 
   removePlayer(id){
-    let newPlayers = Object.assign([], this.state.players);
+    let players = Object.assign([], this.players());
+    let player = players.find(p => p.id == id);
 
-    let player = newPlayers.find(p => p.id == id)
-    newPlayers.splice(newPlayers.indexOf(player), 1);
-    this.setState({
-      players: newPlayers,
-      dataSource: this.state.dataSource.cloneWithRows(newPlayers)
-    })
+    players.splice(players.indexOf(player), 1);
+    this.updatePlayers(players)
   }
 
   addPlayer(){
     let maxId = 0;
-    if (this.state.players.length > 1) {
-      let playerIds = this.state.players.map(p => p.id);
+
+    if (this.players().length > 1) {
+      let playerIds = this.players().map(p => p.id);
       maxId = Math.max.apply(null, playerIds);
     }
 
-    let newPlayer = {
-      name: 'new player',
-      color: [255,255,255],
-      id: maxId + 1
-    };
+    let newPlayer = {name: 'new player', color: [255,255,255], id: maxId + 1};
 
-    let newPlayers = Object.assign([], this.state.players);
-    newPlayers.push(newPlayer);
-    this.setState({
-      players: newPlayers,
-      dataSource: this.state.dataSource.cloneWithRows(newPlayers)
-    })
+    let players = Object.assign([], this.players());
+    players.push(newPlayer);
+
+    this.updatePlayers(players)
+  }
+
+  updatePlayers(newPlayersState){
+    this.props.updateCurrentGame({players: newPlayersState})
+  }
+
+  updateInProgress(newInProgressState){
+    this.props.updateCurrentGame({inProgress: newInProgressState})
   }
 
   startGame(){
-    AsyncStorage.setItem('players', JSON.stringify(this.state.players),() => {
-      console.log("Saved Players")
-    });
-    AsyncStorage.setItem('inProgress', JSON.stringify(true),() => {
-      console.log("Saved Progress")
-    });
     // Send to timer via bluetooth
-    this.setState({inProgress: true});
+    this.updateInProgress(true)
   }
 
   stopGame(){
-    AsyncStorage.setItem('inProgress', JSON.stringify(false));
     // Compute final data
-    this.setState({inProgress: false});
+    this.updateInProgress(false)
   }
 
   render() {
     let actionButton;
-    if (this.state.inProgress) {
+    if (this.props.currentGame.inProgress) {
       actionButton = <ActionButton action={this.stopGame} label={'Stop'}/>
     } else {
       actionButton = (
       <ActionButton action={this.startGame} label={'Start'}/>
       )
     }
+
+    let playerRows = this.players().map((player) => {
+      return <PlayerRow
+        key={player.id}
+        player={player}
+        inProgress={this.props.currentGame.inProgress}
+        removePlayer={this.removePlayer}
+        updatePlayerColor={this.updatePlayerColor}
+        updatePlayerName={this.updatePlayerName}/>
+    })
 
     return (
       <View style={$.playerList}>
@@ -162,14 +119,10 @@ export default class PlayerList extends Component {
 
       <View style={[$.flexRow, {marginBottom: 10}]}>
         {actionButton}
-        {this.state.inProgress ?null: <ActionButton action={this.addPlayer} label={'+Player'} />}
+        {this.props.currentGame.inProgress ?null: <ActionButton action={this.addPlayer} label={'+Player'} />}
       </View>
 
-      <ListView
-      dataSource={this.state.dataSource}
-      renderRow={this.renderPlayer}
-      enableEmptySections={true}
-      />
+      {playerRows}
 
       <Text style={$.note}>
       Note: Times calculated when timer is paused.
@@ -183,7 +136,7 @@ export default class PlayerList extends Component {
     return (
       <View style={[$.header, $.playerRow]} key={player.id}>
       {
-        this.state.inProgress ?null:
+        this.props.currentGame.inProgress ?null:
         <ActionButton action={() => this.removePlayer(player.id)} label={'X'} />
       }
 
