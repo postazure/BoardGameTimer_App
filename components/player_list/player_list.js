@@ -107,8 +107,8 @@ export default class PlayerList extends Component {
     return (
       <View style={$.flex}>
       <View style={[$.actionBar, $.flexRow]}>
-        {actionButton}
-        {this.props.currentGame.inProgress ?null: <IconButton color={colors.darkBlue} action={this.addPlayer} iconName="person-add" />}
+        {this.props.connected ? actionButton : null}
+        {this.props.connected && !this.props.currentGame.inProgress ? <IconButton color={colors.darkBlue} action={this.addPlayer} iconName="person-add" /> : null}
       </View>
 
       <View style={[$.playerList, {flex: .9}]}>

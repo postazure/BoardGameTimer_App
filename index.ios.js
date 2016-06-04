@@ -103,7 +103,7 @@ class BoardGameTimer_App extends Component {
           </View>
           <Text style={$.appHeaderText}>Game Timer</Text>
         </View>
-        <PlayerList bleClient={this.bleClient} style={$.flex} currentGame={this.state.currentGame} updateCurrentGame={this.updateCurrentGame}/>
+        <PlayerList bleClient={this.bleClient} connected={this.state.ble} style={$.flex} currentGame={this.state.currentGame} updateCurrentGame={this.updateCurrentGame}/>
       </View>
     );
   }
