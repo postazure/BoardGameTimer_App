@@ -10,10 +10,16 @@ let noble = require('noble');
 export default class BleConfig extends Component {
   constructor(props){
     super(props)
+<<<<<<< HEAD
     this._printPeripheral = this._printPeripheral.bind(this);
     this._onPeripheralFound = this._onPeripheralFound.bind(this);
     this._writeToPeripheral = this._writeToPeripheral.bind(this);
     this._connectToBLE = this._connectToBLE.bind(this);
+=======
+
+    this._onStateChange = this._onStateChange.bind(this);
+    this._onPeripheralFound = this._onPeripheralFound.bind(this);
+>>>>>>> 9a359ea0858294c06a9d94d6c5b7b84228fd5ca8
   }
 
   componentWillMount(){
@@ -21,6 +27,7 @@ export default class BleConfig extends Component {
     noble.on('discover', this._onPeripheralFound);
   }
 
+<<<<<<< HEAD
   componentWillUnMount(){
     noble.stopScannning();
   }
@@ -149,6 +156,19 @@ export default class BleConfig extends Component {
       peripheral.discoverAllServicesAndCharacteristics(notify);
     }
     peripheral.connect(discover);
+=======
+  _onStateChange(state){
+    if (state === 'poweredOn') {
+     noble.startScanning(["180d"]);
+    } else {
+     noble.stopScanning();
+    }
+ }
+
+  _onPeripheralFound(peripheral){
+    // this._printPeripheral(peripheral);
+    // this._connectHeartRate(peripheral);
+>>>>>>> 9a359ea0858294c06a9d94d6c5b7b84228fd5ca8
   }
 
 
