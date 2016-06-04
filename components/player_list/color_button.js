@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ColorPalette from './color_palette';
-import $ from '../stylesheets/main';
+import $ from '../../stylesheets/main';
 import {
   Text,
   View,

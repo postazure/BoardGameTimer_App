@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import ColorButton from './color_button';
 import PlayerName from './player_name';
-import ActionButton from './action_button';
-import $ from '../stylesheets/main';
+import ActionButton from '../action_button';
+import $ from '../../stylesheets/main';
 import {
   Text,
   TouchableHighlight,
-  View,
-  ScrollView,
-  ListView
+  View
 } from 'react-native';
 import prettyMS from 'pretty-ms';
 
@@ -23,7 +21,6 @@ export default class PlayerRow extends Component {
           <ActionButton
             action={() => this.props.removePlayer(player.id)} label={'X'} />
         }
-
 
         <ColorButton
         color={player.color}

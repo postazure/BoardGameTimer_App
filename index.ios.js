@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PlayerList from './components/player_list'
+import PlayerList from './components/player_list/player_list'
 import BleConfig from './components/ble_config/ble_config'
 import $ from './stylesheets/main'
 import {
