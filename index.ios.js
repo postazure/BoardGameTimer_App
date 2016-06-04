@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PlayerList from './components/player_list/player_list'
-import BleConfig from './components/ble_config/ble_config'
 import IconButton from './components/icon_button'
 import $ from './stylesheets/main'
 import colors from './stylesheets/colors'
 
+import BleClient from './lib/ble_client'
+
 import {
+  Alert,
   AsyncStorage,
   AppRegistry,
   Text,
@@ -16,20 +18,39 @@ class BoardGameTimer_App extends Component {
   constructor(props){
     super(props);
 
+    this.updateCurrentGame = this.updateCurrentGame.bind(this);
+    this.handleBlePress = this.handleBlePress.bind(this);
+    this.updateMessageFromBle = this.updateMessageFromBle.bind(this);
+
+    let connect = () => this.setState({ble: true})
+    let disconnect = () => this.setState({ble: false})
+    this.bleClient = new BleClient(
+      connect,
+      disconnect,
+      this.updateMessageFromBle
+    );
+
     this.state = {
-      ble: true, //view
+      ble: this.bleClient.isConnected(),
       currentGame: {
         players: [],
         inProgress: false
-      }
+      },
+      messageFromBle: null
     }
 
-    this.updateCurrentGame = this.updateCurrentGame.bind(this);
+    if (!this.state.ble){
+      this.bleClient.connect();
+    }
   }
 
   componentDidMount(){
     this.getCurrentGameFromStorage()
+  }
 
+  updateMessageFromBle(message){
+    console.log("Message from Arduino", message.length, message)
+    this.setState({messageFromBle: message});
   }
 
   updateCurrentGame(currentGame){
@@ -57,24 +78,32 @@ class BoardGameTimer_App extends Component {
     AsyncStorage.setItem('inProgress', JSON.stringify(currentGame.inProgress));
   }
 
-  render() {
-    if(!this.state.ble) {
-      return (
-        <View style={[$.appBg, $.flex, {marginTop: 20}]}>
-          <BleConfig />
-        </View>
+  handleBlePress(){
+    if(this.state.ble){
+      let disconnect = this.bleClient.disconnect
+      Alert.alert(
+        'Disconnect?',
+        'Are you sure you want to diconnect from the timer?',
+        [
+          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+          {text: 'OK', onPress: this.bleClient.disconnect},
+        ]
       )
+    } else {
+      this.bleClient.connect();
     }
+  }
 
+  render() {
     return (
       <View style={$.appBg}>
         <View style={$.appBar}>
           <View style={{position: 'absolute', left: 10, top: 20}}>
-            <IconButton iconName={this.state.ble ? "bluetooth" : "bluetooth-disabled"} action={this.setupBluetooth} color={'white'}/>
+            <IconButton iconName={this.state.ble ? "bluetooth" : "bluetooth-disabled"} action={this.handleBlePress} color={'white'}/>
           </View>
           <Text style={$.appHeaderText}>Game Timer</Text>
         </View>
-        <PlayerList style={$.flex} currentGame={this.state.currentGame} updateCurrentGame={this.updateCurrentGame}/>
+        <PlayerList bleClient={this.bleClient} style={$.flex} currentGame={this.state.currentGame} updateCurrentGame={this.updateCurrentGame}/>
       </View>
     );
   }

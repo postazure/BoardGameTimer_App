@@ -74,11 +74,13 @@ export default class PlayerList extends Component {
 
   startGame(){
     // Send to timer via bluetooth
+    this.props.bleClient.write("on");
     this.updateInProgress(true)
   }
 
   stopGame(){
     // Compute final data
+    this.props.bleClient.write("off");
     this.updateInProgress(false)
   }
 
