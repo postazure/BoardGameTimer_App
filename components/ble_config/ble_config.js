@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from '../../stylesheets/main';
 import {Buffer} from 'buffer';
+import ActionButton from '../action_button'
 import {
   Text,
   View
@@ -8,25 +9,36 @@ import {
 
 let noble = require('noble');
 
+const TARGE_BLE_DEVICE_NAME = 'zeus'
+
 export default class BleConfig extends Component {
   constructor(props){
     super(props);
-    this._printPeripheral = this._printPeripheral.bind(this);
-    this._onPeripheralFound = this._onPeripheralFound.bind(this);
-    this._writeToPeripheral = this._writeToPeripheral.bind(this);
-    this._connectToBLE = this._connectToBLE.bind(this);
+
+    this.onPeripheralFound = this.onPeripheralFound.bind(this);
+    this.getCharacteristic = this.getCharacteristic.bind(this);
+    this.writeToBle = this.writeToBle.bind(this);
+
+    this.turnOn = this.turnOn.bind(this);
+    this.turnOff = this.turnOff.bind(this);
+    this.disconnect = this.disconnect.bind(this);
+
+    this.state = {
+      btCharacteristic: null,
+      peripheral: null
+    }
   }
 
   componentWillMount(){
-    noble.on('stateChange', this._onStateChange);
-    noble.on('discover', this._onPeripheralFound);
+    noble.on('stateChange', this.onStateChange);
+    noble.on('discover', this.onPeripheralFound);
   }
 
   componentWillUnMount(){
     noble.stopScannning();
   }
 
-  _onStateChange(state) {
+  onStateChange(state) {
     if (state === 'poweredOn') {
       noble.startScanning();
     } else {
@@ -34,63 +46,64 @@ export default class BleConfig extends Component {
     }
   }
 
-  _onPeripheralFound(peripheral) {
-    if (peripheral.advertisement.localName === "zeus"){
-      this._printPeripheral(peripheral);
-      this._writeToPeripheral(peripheral);
+  onPeripheralFound(peripheral) {
+    if (peripheral.advertisement.localName === TARGE_BLE_DEVICE_NAME){
+      this.getCharacteristic(peripheral);
     }
   }
 
-  _writeToPeripheral(peripheral){
+  getCharacteristic(peripheral){
     peripheral.connect((err) => {
+      this.setState({peripheral: peripheral})
       peripheral.once('disconnect', () => {
+        this.setState({peripheral: null, btCharacteristic: null})
         console.log('disconnected')
       });
 
-      console.log('connect', err)
-
       peripheral.discoverAllServicesAndCharacteristics((err, services, characteristics) => {
-        console.log("discovered characteristics", services[0].uuid, characteristics[0].uuid);
-
-        let buf = Buffer.from("on")
-        characteristics[0].write(buf, true);
+        this.setState({btCharacteristic: characteristics[0]})
       })
     });
   }
 
-  _printPeripheral(peripheral) {
-    console.log('peripheral discovered (' + peripheral.id +
-                ' with address <' + peripheral.address +  ', ' + peripheral.addressType + '>,' +
-                ' connectable ' + peripheral.connectable + ',' +
-                ' RSSI ' + peripheral.rssi + ':');
-    console.log('\thello my local name is:');
-    console.log('\t\t' + peripheral.advertisement.localName);
-    console.log('\tcan I interest you in any of the following advertised services:');
-    console.log('\t\t' + JSON.stringify(peripheral.advertisement.serviceUuids));
+  writeToBle(str){
+    let buf = Buffer.from(str);
+    this.state.btCharacteristic.write(buf, true);
+  }
 
-    var serviceData = peripheral.advertisement.serviceData;
-    if (serviceData && serviceData.length) {
-      console.log('\there is my service data:');
-      for (var i in serviceData) {
-        console.log('\t\t' + JSON.stringify(serviceData[i].uuid) + ': ' + JSON.stringify(serviceData[i].data.toString('hex')));
-      }
-    }
-    if (peripheral.advertisement.manufacturerData) {
-      console.log('\there is my manufacturer data:');
-      console.log('\t\t' + JSON.stringify(peripheral.advertisement.manufacturerData.toString('hex')));
-    }
-    if (peripheral.advertisement.txPowerLevel !== undefined) {
-      console.log('\tmy TX power level is:');
-      console.log('\t\t' + peripheral.advertisement.txPowerLevel);
-    }
+  turnOn(){
+    this.writeToBle("on");
+  }
 
-    console.log();
+  turnOff(){
+    this.writeToBle("off");
+  }
+
+  disconnect(){
+    this.state.peripheral.disconnect();
+  }
+
+  connect(){
+    noble.stopScanning();
+    noble.startScanning();
   }
 
   render() {
+    if(!this.state.btCharacteristic){
+      return (
+        <View>
+          <Text style={$.h1White}>Not Connected</Text>
+          <ActionButton label={"Connect"} action={this.connect} />
+        </View>
+      )
+    }
+
     return (
       <View>
-        <Text>No BLE</Text>
+        <Text style={$.h1White}>Connected</Text>
+        <ActionButton label={"On"} action={this.turnOn} />
+        <ActionButton label={"Off"} action={this.turnOff} />
+        <ActionButton label={"Disconnect"} action={this.disconnect} />
       </View>
     );
   }
