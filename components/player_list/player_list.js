@@ -73,14 +73,37 @@ export default class PlayerList extends Component {
   }
 
   startGame(){
-    // Send to timer via bluetooth
-    this.props.bleClient.write("on");
+    let leadingZeros = (num) => {
+      let str = num.toString();
+      switch (str.length) {
+        case 1:
+          return `00${str}`;
+        case 2:
+          return `0${str}`;
+        default:
+          return str;
+      }
+    };
+
+    let players = this.players();
+    let playersInfoString = '';
+    for(let i = 0; i < players.length; i++){
+      //id |r |g |b
+      // 01255255255
+      let id = players[i].id;
+      let r = leadingZeros(players[i].color[0])
+      let g = leadingZeros(players[i].color[1])
+      let b = leadingZeros(players[i].color[2])
+
+      playersInfoString += id < 10 ? `0${id}` : id;
+      playersInfoString += r + g + b;
+    }
+
+    this.props.bleClient.write(playersInfoString);
     this.updateInProgress(true)
   }
 
   stopGame(){
-    // Compute final data
-    this.props.bleClient.write("off");
     this.updateInProgress(false)
   }
 

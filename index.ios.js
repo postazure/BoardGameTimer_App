@@ -50,6 +50,7 @@ class BoardGameTimer_App extends Component {
 
   updateMessageFromBle(message){
     console.log("Message from Arduino", message.length, message)
+    // update player times
     this.setState({messageFromBle: message});
   }
 
