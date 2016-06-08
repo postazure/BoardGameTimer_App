@@ -5,6 +5,7 @@ import $ from '../../stylesheets/main';
 import colors from '../../stylesheets/colors';
 import {
   Text,
+  ScrollView,
   View
 } from 'react-native';
 
@@ -73,33 +74,15 @@ export default class PlayerList extends Component {
   }
 
   startGame(){
-    let leadingZeros = (num) => {
-      let str = num.toString();
-      switch (str.length) {
-        case 1:
-          return `00${str}`;
-        case 2:
-          return `0${str}`;
-        default:
-          return str;
-      }
-    };
+    let playersInfo = [];
+    this.players().forEach((player) => {
+      playersInfo.push(player.id);
+      playersInfo.push(player.color[0]);
+      playersInfo.push(player.color[1]);
+      playersInfo.push(player.color[2]);
+    });
 
-    let players = this.players();
-    let playersInfoString = '';
-    for(let i = 0; i < players.length; i++){
-      //id |r |g |b
-      // 01255255255
-      let id = players[i].id;
-      let r = leadingZeros(players[i].color[0])
-      let g = leadingZeros(players[i].color[1])
-      let b = leadingZeros(players[i].color[2])
-
-      playersInfoString += id < 10 ? `0${id}` : id;
-      playersInfoString += r + g + b;
-    }
-
-    this.props.bleClient.write(playersInfoString);
+    this.props.bleClient.write(playersInfo);
     this.updateInProgress(true)
   }
 
@@ -134,12 +117,12 @@ export default class PlayerList extends Component {
         {this.props.connected && !this.props.currentGame.inProgress ? <IconButton color={colors.darkBlue} action={this.addPlayer} iconName="person-add" /> : null}
       </View>
 
-      <View style={[$.playerList, {flex: .9}]}>
+      <ScrollView style={[$.playerList, {flex: .9}]}>
       {playerRows}
-      </View>
+      </ScrollView>
 
       <Text style={[$.note, {flex: .1}]}>
-      Note: Add players.
+      Note: Wait for solid green light before pressing play.
       </Text>
 
       </View>
