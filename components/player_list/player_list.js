@@ -57,7 +57,7 @@ export default class PlayerList extends Component {
       maxId = Math.max.apply(null, playerIds);
     }
 
-    let newPlayer = {name: 'new player', color: [255,255,255], id: maxId + 1};
+    let newPlayer = {name: 'new player', color: [255,255,255], id: maxId + 1, totalTime: 1, totalTurns: 1};
 
     let players = Object.assign([], this.players());
     players.push(newPlayer);
@@ -87,6 +87,7 @@ export default class PlayerList extends Component {
   }
 
   stopGame(){
+    this.props.stopGame();
     this.updateInProgress(false)
   }
 
@@ -120,11 +121,6 @@ export default class PlayerList extends Component {
       <ScrollView style={[$.playerList, {flex: .9}]}>
       {playerRows}
       </ScrollView>
-
-      <Text style={[$.note, {flex: .1}]}>
-      Note: Wait for solid green light before pressing play.
-      </Text>
-
       </View>
     );
   }

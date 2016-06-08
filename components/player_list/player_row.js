@@ -49,8 +49,8 @@ export default class PlayerRow extends Component {
         </View>
 
         <View style={$.playerTime}>
-          <Text style={$.subtitle}>Total: {prettyMS(1234567)} </Text>
-          <Text style={$.subtitle}>Average: {prettyMS(123456)} </Text>
+          <Text style={$.subtitle}>Total: {prettyMS(player.totalTime ? player.totalTime : 0)} </Text>
+          <Text style={$.subtitle}>Average: {prettyMS(player.totalTurns ? player.totalTime/player.totalTurns: 0)} </Text>
         </View>
 
         {

@@ -23,7 +23,11 @@ class BoardGameTimer_App extends Component {
     this.updateMessageFromBle = this.updateMessageFromBle.bind(this);
 
     let connect = () => this.setState({ble: true})
-    let disconnect = () => this.setState({ble: false})
+    let disconnect = () => {
+      this.setState({ble: false});
+      this.status('b');
+    };
+
     this.bleClient = new BleClient(
       connect,
       disconnect,
@@ -45,13 +49,17 @@ class BoardGameTimer_App extends Component {
   }
 
   componentDidMount(){
-    this.getCurrentGameFromStorage()
+    this.status();
+    this.getCurrentGameFromStorage();
   }
 
   updateMessageFromBle(message){
-    console.log("Message from Arduino", message.length, message)
-    // update player times
-    this.setState({messageFromBle: message});
+    console.log("message", message)
+    if (message === "c" || message === "p" || message === "w"){
+      this.status(message);
+    } else {
+      this.assignTimesToPlayers(message);
+    }
   }
 
   updateCurrentGame(currentGame){
@@ -95,16 +103,64 @@ class BoardGameTimer_App extends Component {
     }
   }
 
+  assignTimesToPlayers(message){
+    let playerTimeInfoList = message.split(':').map(info => info.split(','));
+    let players = Object.assign([], this.state.currentGame.players)
+    players.forEach((player) => {
+      let playerInfo = playerTimeInfoList.find(info => parseInt(info[0]) === player.id); // id, turns, time
+      player.totalTurns = parseInt(playerInfo[1]);
+      player.totalTime = parseInt(playerInfo[2]);
+    });
+
+    this.updateCurrentGame({players: players});
+  }
+
+  status(status){
+    const noStatus = "Add players, then turn on your timer to play.";
+    const noBluetooth = "Cannot find timer. Ensure the timer is on, and press the 'B' icon."
+    const ready = "Press play when ready.";
+    const calibrating = "The timer is calibrating. Make sure the lid is up."
+    const working = "Flip the lid up to pause. Press stop to end the game."
+
+    let newStatus;
+    switch (status) {
+      case 'c':
+        newStatus = calibrating;
+        break;
+      case 'p':
+        newStatus = ready;
+        break;
+      case 'w':
+        newStatus = working;
+        break;
+      case 'b':
+        newStatus = noBluetooth;
+        break;
+      default:
+        newStatus = noStatus;
+    }
+
+    this.setState({message: newStatus});
+  }
+
   render() {
     return (
       <View style={$.appBg}>
-        <View style={$.appBar}>
-          <View style={{position: 'absolute', left: 10, top: 20}}>
-            <IconButton iconName={this.state.ble ? "bluetooth" : "bluetooth-disabled"} action={this.handleBlePress} color={'white'}/>
-          </View>
-          <Text style={$.appHeaderText}>Game Timer</Text>
-        </View>
-        <PlayerList bleClient={this.bleClient} connected={this.state.ble} style={$.flex} currentGame={this.state.currentGame} updateCurrentGame={this.updateCurrentGame}/>
+      <View style={$.appBar}>
+      <View style={{position: 'absolute', left: 10, top: 20}}>
+      <IconButton iconName={this.state.ble ? "bluetooth" : "bluetooth-disabled"} action={this.handleBlePress} color={'white'}/>
+      </View>
+      <Text style={$.appHeaderText}>Game Timer</Text>
+      </View>
+      <PlayerList bleClient={this.bleClient}
+      connected={this.state.ble}
+      style={$.flex}
+      currentGame={this.state.currentGame}
+      updateCurrentGame={this.updateCurrentGame}
+      stopGame={() => {this.status()}}/>
+      <Text style={[$.note, {flex: .1}]}>
+      Note: {this.state.message}
+      </Text>
       </View>
     );
   }
