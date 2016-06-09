@@ -22,7 +22,11 @@ class BoardGameTimer_App extends Component {
     this.handleBlePress = this.handleBlePress.bind(this);
     this.updateMessageFromBle = this.updateMessageFromBle.bind(this);
 
-    let connect = () => this.setState({ble: true})
+    let connect = () => {
+      this.setState({ble: true})
+      this.status();
+    };
+
     let disconnect = () => {
       this.setState({ble: false});
       this.status('b');
@@ -43,6 +47,7 @@ class BoardGameTimer_App extends Component {
       messageFromBle: null
     }
 
+    // Disable for simulator debugging
     if (!this.state.ble){
       this.bleClient.connect();
     }
@@ -72,12 +77,16 @@ class BoardGameTimer_App extends Component {
   getCurrentGameFromStorage(){
     AsyncStorage.getItem('players', (err, res) => {
       let players = JSON.parse(res);
-      this.updateCurrentGame({players: players});
+      if (players) {
+        this.updateCurrentGame({players: players});
+      }
     });
 
     AsyncStorage.getItem('inProgress', (err, res) => {
       let inProgress = JSON.parse(res);
-      this.updateCurrentGame({inProgress: inProgress});
+      if (inProgress != null) {
+        this.updateCurrentGame({inProgress: inProgress});
+      }
     });
   }
 
@@ -120,7 +129,7 @@ class BoardGameTimer_App extends Component {
     const noBluetooth = "Cannot find timer. Ensure the timer is on, and press the 'B' icon."
     const ready = "Press play when ready.";
     const calibrating = "The timer is calibrating. Make sure the lid is up."
-    const working = "Flip the lid up to pause. Press stop to end the game."
+    const working = "Flip the lid up to pause.\n When finished, pass the timer one last time and press stop to end the game."
 
     let newStatus;
     switch (status) {
