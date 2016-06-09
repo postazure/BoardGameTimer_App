@@ -57,7 +57,7 @@ export default class PlayerList extends Component {
       maxId = Math.max.apply(null, playerIds);
     }
 
-    let newPlayer = {name: 'new player', color: [255,255,255], id: maxId + 1, totalTime: 1, totalTurns: 1};
+    let newPlayer = {name: 'new player', color: [255,255,255], id: maxId + 1, totalTime: 0, totalTurns: 1};
 
     let players = Object.assign([], this.players());
     players.push(newPlayer);
