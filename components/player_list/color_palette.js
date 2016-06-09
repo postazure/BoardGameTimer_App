@@ -43,15 +43,15 @@ export default class ColorPalette extends Component {
   }
 
   buildPalette(){
-    palette = [];
-    for(let i = 0; i < 3; i++){
-      for(let j = 0; j < 3; j++){
-        for(let k = 0; k < 3; k++){
-          palette.push([i*85, j*85, k*85]);
-        };
-      };
-    };
-    return palette;
+    return [
+      [255,0,0],
+      [0,255,0],
+      [0,0,255],
+      [255,255,0],
+      [0,255,255],
+      [255,0,255],
+      [255,135,0],
+    ]
   }
 }
 
