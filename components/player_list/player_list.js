@@ -75,15 +75,20 @@ export default class PlayerList extends Component {
 
   startGame(){
     let playersInfo = [];
-    this.players().forEach((player) => {
+    let players = Object.assign({}, this.players());
+    players.forEach((player) => {
       playersInfo.push(player.id);
       playersInfo.push(player.color[0]);
       playersInfo.push(player.color[1]);
       playersInfo.push(player.color[2]);
+
+      player.totalTime = 0;
+      player.totalTurns = 1;
     });
 
     this.props.bleClient.write(playersInfo);
-    this.updateInProgress(true)
+    this.updateInProgress(true);
+    this.updatePlayers(players);
   }
 
   stopGame(){
